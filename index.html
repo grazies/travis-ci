@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Travis-ci by grazies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Travis-ci</h1>
+      <h2 class="project-tagline">Free continuous integration platform for GitHub projects.</h2>
+      <a href="https://github.com/grazies/travis-ci" class="btn">View on GitHub</a>
+      <a href="https://github.com/grazies/travis-ci/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/grazies/travis-ci/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="travis-ci" class="anchor" href="#travis-ci" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Travis CI</h1>
+
+<p><a href="https://travis-ci.com">Travis CI</a> is a hosted continuous integration and
+deployment system. There are two versions of it,
+<a href="https://travis-ci.com">travis-ci.com</a> for private repositories, and
+<a href="https://travis-ci.org">travis-ci.org</a> for public repositories.</p>
+
+<p>This repository contains the <a href="https://github.com/travis-ci/travis-ci/issues">central issue
+tracker</a> for the Travis CI
+project.</p>
+
+<h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p>Documentation for the Travis CI project can be found at
+<a href="https://docs.travis-ci.com">https://docs.travis-ci.com</a>.</p>
+
+<h2>
+<a id="other-repositories" class="anchor" href="#other-repositories" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other repositories</h2>
+
+<p>Travis CI consists of many different sub-projects. The main ones are:</p>
+
+<h3>
+<a id="travis-api" class="anchor" href="#travis-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-api</h3>
+
+<p><a href="https://github.com/travis-ci/travis-api">travis-api</a> is the Sinatra app that's
+responsible for serving our API. It responds to different HTTP endpoints and
+runs services in <a href="#travis-core">travis-core</a>. Very little logic is in this
+repository.</p>
+
+<h3>
+<a id="travis-build" class="anchor" href="#travis-build" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-build</h3>
+
+<p><a href="https://github.com/travis-ci/travis-build">travis-build</a> creates the build
+script for each job. It takes the configuration from the <code>.travis.yml</code> file and
+creates a <code>bash</code> script that is then run in the build environment by
+<a href="#travis-worker">travis-worker</a>.</p>
+
+<h3>
+<a id="travis-core" class="anchor" href="#travis-core" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-core</h3>
+
+<p><a href="https://github.com/travis-ci/travis-core">travis-core</a> holds most of the logic
+for Travis CI. This repository is shared across several other apps and
+holds the models, services, and other things that these apps need.</p>
+
+<h3>
+<a id="travis-cookbooks" class="anchor" href="#travis-cookbooks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-cookbooks</h3>
+
+<p><a href="https://github.com/travis-ci/travis-cookbooks">travis-cookbooks</a> holds the
+<a href="https://docs.chef.io/index.html">Chef</a> cookbooks that are used to provision the build environments.</p>
+
+<h3>
+<a id="travis-hub" class="anchor" href="#travis-hub" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-hub</h3>
+
+<p><a href="https://github.com/travis-ci/travis-hub">travis-hub</a> collects events from
+other apps and notifies other apps about the events. For example, it notifies
+<a href="#travis-tasks">travis-tasks</a> about builds starting and finishing so
+notifications can be sent out.</p>
+
+<p>travis-hub is also responsible for enqueueing jobs that have been created and
+enforcing the Quality of Service restrictions, such as the number of concurrent
+builds per user.</p>
+
+<h3>
+<a id="travis-listener" class="anchor" href="#travis-listener" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-listener</h3>
+
+<p><a href="https://github.com/travis-ci/travis-listener">travis-listener</a> receives
+notifications from GitHub whenever commits are pushed or pull requests are
+opened. They are then pushed onto RabbitMQ for other apps to process.</p>
+
+<h3>
+<a id="travis-logs" class="anchor" href="#travis-logs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-logs</h3>
+
+<p><a href="https://github.com/travis-ci/travis-logs">travis-logs</a> receives log updates
+from <a href="#travis-worker">travis-worker</a>, saves them to the database and pushes
+them to the <a href="#travis-web">web client</a>. When a job is finished, travis-logs is
+responsible for pushing the log to Amazon S3 for archiving.</p>
+
+<h3>
+<a id="travis-support" class="anchor" href="#travis-support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-support</h3>
+
+<p><a href="https://github.com/travis-ci/travis-support">travis-support</a> holds shared
+logic for the different Travis CI apps. It is different from travis-core in
+that it holds more generic things, like how to run an async job or how to
+handle exceptions.</p>
+
+<h3>
+<a id="travis-tasks" class="anchor" href="#travis-tasks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-tasks</h3>
+
+<p><a href="https://github.com/travis-ci/travis-tasks">travis-tasks</a> receives
+notifications from <a href="#travis-hub">travis-hub</a> and sends out notifications to the
+different notification providers as needed.</p>
+
+<h3>
+<a id="travis-web" class="anchor" href="#travis-web" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-web</h3>
+
+<p><a href="https://github.com/travis-ci/travis-web">travis-web</a> is our main Web client.
+It is written using <a href="http://emberjs.com">Ember</a> and communicates with
+<a href="#travis-api">travis-api</a> to get information and gets live updates from
+<a href="#travis-hub">travis-hub</a> and <a href="#travis-logs">travis-logs</a> through
+<a href="https://pusher.com/">Pusher</a>.</p>
+
+<h3>
+<a id="travis-worker" class="anchor" href="#travis-worker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>travis-worker</h3>
+
+<p><a href="https://github.com/travis-ci/travis-worker">travis-worker</a> is responsible for
+running the build scripts in a clean environment. It streams the log output to
+<a href="#travis-logs">travis-logs</a> and pushes state updates (build starting/finishing)
+to <a href="#travis-hub">travis-hub</a>.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/grazies/travis-ci">Travis-ci</a> is maintained by <a href="https://github.com/grazies">grazies</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
